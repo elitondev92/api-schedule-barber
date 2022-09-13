@@ -3,11 +3,11 @@ import { Document } from 'mongoose';
 
 export type BarberDocument = Barber & Document;
 
-@Schema()
+@Schema({ autoIndex: true })
 export class Barber {
   @Prop({ required: true })
   name: string;
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
   @Prop({ required: true })
   password: string;
