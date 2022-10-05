@@ -13,8 +13,16 @@ export class BarbersService {
     return this.baberModel.find().exec();
   }
 
+  async findOne(email: string) {
+    return this.baberModel.findOne({ email }).exec();
+  }
+
   async create(createBarberDto: any) {
     const createdBarber = await new this.baberModel(createBarberDto).save();
     return createdBarber;
+  }
+
+  async remove(id: string) {
+    return this.baberModel.findByIdAndDelete(id).exec();
   }
 }
