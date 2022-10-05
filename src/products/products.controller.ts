@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
   UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
@@ -24,8 +25,9 @@ export class ProductsController {
   }
 
   @Get()
-  findAll() {
-    return this.productsService.findAll();
+  findAll(@Request() req) {
+    const { user } = req;
+    return this.productsService.findAll(user.userId);
   }
 
   @Get(':id')

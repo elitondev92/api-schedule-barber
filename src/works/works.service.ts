@@ -23,8 +23,8 @@ export class WorksService {
     return createdWork.save();
   }
 
-  findAll() {
-    return this.workModel.find().exec();
+  findAll(userId: string) {
+    return this.workModel.find({ barber: userId }).exec();
   }
 
   findOne(id: string) {

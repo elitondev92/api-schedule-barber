@@ -23,8 +23,8 @@ export class ProductsService {
     return createdProduct.save();
   }
 
-  public async findAll() {
-    return this.productModel.find().exec();
+  public async findAll(userId: string) {
+    return this.productModel.find({ barber: userId }).exec();
   }
 
   findOne(id: string) {

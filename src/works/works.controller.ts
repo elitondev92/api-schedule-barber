@@ -6,11 +6,15 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { WorksService } from './works.service';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { UpdateWorkDto } from './dto/update-work.dto';
+import { AuthGuard } from '@nestjs/passport';
 
+@UseGuards(AuthGuard('jwt'))
 @Controller('works')
 export class WorksController {
   constructor(private readonly worksService: WorksService) {}
@@ -21,8 +25,9 @@ export class WorksController {
   }
 
   @Get()
-  findAll() {
-    return this.worksService.findAll();
+  findAll(@Request() req) {
+    const { user } = req;
+    return this.worksService.findAll(user.userId);
   }
 
   @Get(':id')
