@@ -6,6 +6,7 @@ import { BarbersService } from './barbers.service';
 import * as bcrypt from 'bcrypt';
 
 @Module({
+  exports: [BarbersService],
   imports: [
     MongooseModule.forFeatureAsync([
       {

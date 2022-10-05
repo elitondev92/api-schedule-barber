@@ -1,14 +1,14 @@
 import { Module } from '@nestjs/common';
-import { WorkService } from './works.service';
-import { WorkController } from './works.controller';
+import { WorksService } from './works.service';
+import { WorksController } from './works.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Work, WorkSchema } from './entities/works.entity';
+import { Work, WorkSchema } from './entities/work.entity';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Work.name, schema: WorkSchema }]),
   ],
-  controllers: [WorkController],
-  providers: [WorkService],
+  controllers: [WorksController],
+  providers: [WorksService],
 })
 export class WorksModule {}

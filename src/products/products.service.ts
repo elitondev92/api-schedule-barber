@@ -23,7 +23,7 @@ export class ProductsService {
     return createdProduct.save();
   }
 
-  findAll() {
+  public async findAll() {
     return this.productModel.find().exec();
   }
 

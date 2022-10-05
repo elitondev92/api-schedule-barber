@@ -14,7 +14,11 @@ export class BarbersService {
   }
 
   async findOne(email: string) {
-    return this.baberModel.findOne({ email }).exec();
+    const barber = await this.baberModel.findOne({ email }).exec();
+    if (!barber) {
+      throw new Error('Barber not found');
+    }
+    return barber;
   }
 
   async create(createBarberDto: any) {
