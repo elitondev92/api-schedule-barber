@@ -10,7 +10,7 @@ export class BarbersController {
     return this.babersService.findAll();
   }
 
-  @Post()
+  @Post('signup')
   create(@Body() createBarberDto: any): any {
     return this.babersService.create(createBarberDto);
   }
