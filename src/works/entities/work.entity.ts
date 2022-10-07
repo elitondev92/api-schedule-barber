@@ -16,7 +16,13 @@ export class Work {
   description: string;
 
   @Prop({ required: true })
+  duration: number;
+
+  @Prop({ required: true })
   price: number;
+
+  @Prop()
+  recurrence: number;
 
   @Prop()
   image: string;
