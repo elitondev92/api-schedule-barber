@@ -15,6 +15,7 @@ export class AuthService {
     const payload = { email: barber.email, sub: barber._id };
     return {
       token: this.jwtService.sign(payload),
+      user: barber,
     };
   }
   async validateBarber(email: string, password: string) {
