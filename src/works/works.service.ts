@@ -23,11 +23,11 @@ export class WorksService {
     return createdWork.save();
   }
 
-  findAll(userId: string) {
+  public async findAll(userId: string) {
     return this.workModel.find({ barber: userId }).exec();
   }
 
-  findOne(id: string) {
+  public async findOne(id: string) {
     return this.workModel.findById(id).exec();
   }
 
@@ -41,7 +41,7 @@ export class WorksService {
     return this.workModel.findByIdAndUpdate(id, updateWorkDto).exec();
   }
 
-  remove(id: string) {
+  public async remove(id: string) {
     return this.workModel.findByIdAndDelete(id).exec();
   }
 }
