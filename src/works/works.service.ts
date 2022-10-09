@@ -31,7 +31,13 @@ export class WorksService {
     return this.workModel.findById(id).exec();
   }
 
-  update(id: string, updateWorkDto: UpdateWorkDto) {
+  public async update(id: string, updateWorkDto: UpdateWorkDto) {
+    const checkWork = await this.workModel
+      .findOne({ name: updateWorkDto.name })
+      .exec();
+    if (checkWork) {
+      return { message: 'Work already exists' };
+    }
     return this.workModel.findByIdAndUpdate(id, updateWorkDto).exec();
   }
 
