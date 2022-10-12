@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { WorksModule } from './works/works.module';
 import { StylistModule } from './stylist/stylist.module';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -14,6 +15,9 @@ import { StylistModule } from './stylist/stylist.module';
       `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_DATABASE}?retryWrites=true&w=majority`,
     ),
     BarbersModule,
+    MulterModule.register({
+      dest: 'tmp/uploads',
+    }),
     ProductsModule,
     WorksModule,
     AuthModule,
