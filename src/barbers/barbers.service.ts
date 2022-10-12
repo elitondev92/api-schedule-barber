@@ -1,3 +1,4 @@
+import AppError from 'src/errors/AppError';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -26,7 +27,7 @@ export class BarbersService {
       .findOne({ email: createBarberDto.email })
       .exec();
     if (checkBarber) {
-      throw new Error('Barbeiro já cadastrado');
+      throw new AppError('Barbeiro já cadastrado');
     }
     const createdBarber = await new this.baberModel(createBarberDto).save();
     return createdBarber;
