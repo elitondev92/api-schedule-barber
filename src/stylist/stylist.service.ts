@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateStylistDto } from './dto/create-stylist.dto';
 import { UpdateStylistDto } from './dto/update-stylist.dto';
 import { Stylist, StylistDocument } from './entities/stylist.entity';
+import AppError from '../errors/AppError';
 
 @Injectable()
 export class StylistService {
@@ -17,7 +18,7 @@ export class StylistService {
       .findOne({ name: createStylistDto.name })
       .exec();
     if (checkStylist) {
-      return { message: 'Stylist already exists' };
+      throw new AppError('O profissional já existe');
     }
     const createdStylist = new this.stylistModel(createStylistDto);
     return createdStylist.save();
@@ -32,6 +33,12 @@ export class StylistService {
   }
 
   update(id: string, updateStylistDto: UpdateStylistDto) {
+    const checkStylist = this.stylistModel
+      .findOne({ name: updateStylistDto.name })
+      .exec();
+    if (checkStylist) {
+      throw new AppError('O profissional já existe');
+    }
     return this.stylistModel.findByIdAndUpdate(id, updateStylistDto).exec();
   }
 

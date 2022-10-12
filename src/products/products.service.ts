@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product, ProductDocument } from './entities/product.entity';
+import AppError from '../errors/AppError';
 
 @Injectable()
 export class ProductsService {
@@ -17,7 +18,7 @@ export class ProductsService {
       .findOne({ name: createProductDto.name })
       .exec();
     if (checkProduct) {
-      return { message: 'Product already exists' };
+      throw new AppError('O produto já existe');
     }
     const createdProduct = new this.productModel(createProductDto);
     return createdProduct.save();
@@ -32,6 +33,12 @@ export class ProductsService {
   }
 
   update(id: string, updateProductDto: UpdateProductDto) {
+    const checkProduct = this.productModel
+      .findOne({ name: updateProductDto.name })
+      .exec();
+    if (checkProduct) {
+      throw new AppError('O produto já existe');
+    }
     return this.productModel.findByIdAndUpdate(id, updateProductDto).exec();
   }
 

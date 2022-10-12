@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { UpdateWorkDto } from './dto/update-work.dto';
 import { Work, WorkDocument } from './entities/work.entity';
+import AppError from 'src/errors/AppError';
 
 @Injectable()
 export class WorksService {
@@ -17,7 +18,7 @@ export class WorksService {
       .findOne({ name: createWorkDto.name })
       .exec();
     if (checkWork) {
-      return { message: 'Work already exists' };
+      throw new AppError('Este serviço já existe');
     }
     const createdWork = new this.workModel(createWorkDto);
     return createdWork.save();
@@ -36,7 +37,7 @@ export class WorksService {
       .findOne({ name: updateWorkDto.name })
       .exec();
     if (checkWork) {
-      return { message: 'Work already exists' };
+      throw new AppError('Este serviço já existe');
     }
     return this.workModel.findByIdAndUpdate(id, updateWorkDto).exec();
   }

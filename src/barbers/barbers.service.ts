@@ -22,6 +22,12 @@ export class BarbersService {
   }
 
   async create(createBarberDto: any) {
+    const checkBarber = await this.baberModel
+      .findOne({ email: createBarberDto.email })
+      .exec();
+    if (checkBarber) {
+      throw new Error('Barbeiro já cadastrado');
+    }
     const createdBarber = await new this.baberModel(createBarberDto).save();
     return createdBarber;
   }
