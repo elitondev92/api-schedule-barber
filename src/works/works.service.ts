@@ -5,10 +5,8 @@ import { CreateWorkDto } from './dto/create-work.dto';
 import { UpdateWorkDto } from './dto/update-work.dto';
 import { Work, WorkDocument } from './entities/work.entity';
 import AppError from 'src/errors/AppError';
-import * as multer from 'multer';
 import { S3 } from 'aws-sdk';
-import crypto from 'crypto';
-import { extname, resolve } from 'path';
+import { resolve } from 'path';
 import * as fs from 'fs';
 
 @Injectable()
@@ -46,9 +44,6 @@ export class WorksService {
       .exec();
     if (checkWork) {
       throw new AppError('Este serviço já existe');
-    }
-    if (updateWorkDto.image) {
-      updateWorkDto.image = await this.updateFile(updateWorkDto.image, id);
     }
     return this.workModel.findByIdAndUpdate(id, updateWorkDto).exec();
   }
@@ -94,13 +89,5 @@ export class WorksService {
         Key: file,
       })
       .promise();
-  }
-
-  public async updateFile(file: string, id: string): Promise<string> {
-    const work = await this.workModel.findById(id).exec();
-    if (work.image) {
-      await this.deleteFile(work.image);
-    }
-    return this.saveFile(file);
   }
 }

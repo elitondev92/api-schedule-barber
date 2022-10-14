@@ -66,11 +66,16 @@ export class WorksController {
       }),
     }),
   )
-  async uploadFile(@Param('id') id: string, @UploadedFile() file) {
-    return this.worksService.saveFile(file.filename).then((url) =>
+  async saveFile(@Param('id') id: string, @UploadedFile() file) {
+    return this.worksService.saveFile(file.filename).then(() =>
       this.worksService.update(id, {
         image: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.filename}`,
       }),
     );
+  }
+
+  @Delete(':id/delete')
+  async deleteFile(@Param('id') id: string) {
+    return this.worksService.deleteFile(id);
   }
 }
