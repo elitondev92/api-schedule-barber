@@ -9,7 +9,7 @@ export class Work {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Barber' })
   barber: Barber;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   name: string;
 
   @Prop()

@@ -21,9 +21,9 @@ export class WorksService {
     });
   }
 
-  public async create(createWorkDto: CreateWorkDto) {
+  public async create(userId: string, createWorkDto: CreateWorkDto) {
     const checkWork = await this.workModel
-      .findOne({ name: createWorkDto.name })
+      .findOne({ barber: userId }, { name: createWorkDto.name })
       .exec();
     if (checkWork) {
       throw new AppError('Este serviço já existe');
@@ -36,8 +36,8 @@ export class WorksService {
     return this.workModel.find({ barber: userId }).exec();
   }
 
-  public async findOne(id: string) {
-    return this.workModel.findById(id).exec();
+  public async findOne(userId: string, id: string) {
+    return this.workModel.findById({ barber: userId }, id).exec();
   }
 
   public async update(id: string, updateWorkDto: UpdateWorkDto) {

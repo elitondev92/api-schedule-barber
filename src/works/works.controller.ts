@@ -26,8 +26,9 @@ export class WorksController {
   constructor(private readonly worksService: WorksService) {}
 
   @Post()
-  create(@Body() createWorkDto: CreateWorkDto) {
-    return this.worksService.create(createWorkDto);
+  create(@Body() createWorkDto: CreateWorkDto, @Request() req) {
+    const { user } = req;
+    return this.worksService.create(user.userId, createWorkDto);
   }
 
   @Get()
@@ -37,8 +38,9 @@ export class WorksController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.worksService.findOne(id);
+  findOne(@Param('id') id: string, @Request() req) {
+    const { user } = req;
+    return this.worksService.findOne(user.userId, id);
   }
 
   @Patch(':id')
