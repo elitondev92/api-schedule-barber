@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { BarbersService } from 'src/barbers/barbers.service';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import AppError from 'src/errors/AppError';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +15,6 @@ export class AuthService {
   async login(barber: any) {
     const payload = { email: barber.email, sub: barber._id };
     return {
-      // remove password from response
       ...barber._doc,
       password: undefined,
       token: this.jwtService.sign(payload),
@@ -26,12 +26,12 @@ export class AuthService {
     try {
       barber = await this.barbersService.findOne(email);
     } catch (error) {
-      return null;
+      throw new AppError('Invalid credentials', 401);
     }
 
     const isPasswordValid = await compareSync(password, barber.password);
     if (!isPasswordValid) {
-      return null;
+      throw new AppError('Invalid credentials', 401);
     }
 
     return barber;
