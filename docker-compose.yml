@@ -1,5 +1,11 @@
 version: "3"
 services:
+  node:
+    build: .
+    command: "npm run build"
+    working_dir: /usr/src/app
+    ports:
+      - 3000:3000
   web:
     image: nginx
     ports:
@@ -8,12 +14,4 @@ services:
       - .:/usr/share/nginx/html
     depends_on:
         - node
-  node:
-    build: .
-    command: "npm run build"
-    working_dir: /usr/src/app
-    expose:
-      - '3000'
-    ports:
-      - '3000:3000'
       
