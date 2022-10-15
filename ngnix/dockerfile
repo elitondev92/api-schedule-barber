@@ -1,0 +1,10 @@
+FROM ngnix:latest
+
+# Copy the nginx configuration
+COPY --from=builder /usr/src/app/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Expose the port nginx is reachable on
+EXPOSE 80
+
+# Let nginx start
+CMD ["nginx", "-g", "daemon off;"]
