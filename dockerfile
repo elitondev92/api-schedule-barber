@@ -6,7 +6,7 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package*.json ./
 
-RUN npm i -g @nestjs/cli && npm install -g npm@8.19.2 && npm install
+RUN npm install --global @nestjs/cli && npm install --global npm@8.19.2 && npm install
 
 # Bundle app source
 COPY . .
