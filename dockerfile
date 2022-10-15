@@ -1,4 +1,6 @@
-FROM node:16
+FROM node:18-alpine
+
+RUN mkdir -p /usr/src/app && chown -R node:node /usr/src/app
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -9,7 +11,7 @@ COPY package*.json ./
 RUN npm install
 
 # Bundle app source
-COPY . .
+COPY --chown=node:node . .
 
 RUN npm run build
 

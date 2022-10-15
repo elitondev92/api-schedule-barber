@@ -9,10 +9,10 @@ services:
     depends_on:
       - app
   app:
-    image: node:latest
-    volumes:
-      - .:/app
-    working_dir: /app
-    command: npm run dev
+    build: .
+    command: npm run build
+    working_dir: /usr/src/app
+    expose:
+      - 3000
     ports:
       - 3000:3000
