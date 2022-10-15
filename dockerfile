@@ -1,6 +1,4 @@
-FROM node:16.15.1-alpine3.14
-
-RUN mkdir -p /usr/src/app && chown -R node:node /usr/src/app
+FROM node:16.15.1
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -8,10 +6,10 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package*.json ./
 
-RUN npm i -g @nestjs/cli && npm install
+RUN npm i -g @nestjs/cli && npm install -g npm@8.19.2 && npm install
 
 # Bundle app source
-COPY --chown=node:node . .
+COPY . .
 
 RUN npm run build
 
