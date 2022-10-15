@@ -9,9 +9,7 @@ COPY --chown=node:node package*.json ./
 RUN npm install --global @nestjs/cli && npm install --global npm@8.19.2 && npm install
 
 # Bundle app source
-COPY --chown=node:node . .
-
-USER node
+COPY . .
 
 RUN npm run build
 
