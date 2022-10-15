@@ -1,9 +1,10 @@
 version: "3"
 services:
-  build: .
-  command: "npm run build"
-  working_dir: /usr/src/app
-  expose:
-    - "3000"
-  ports:
-    - "3000:3000"
+  app:
+    build: .
+    command: "npm run build"
+    working_dir: /usr/src/app
+    expose:
+      - "3000"
+    ports:
+      - "3000:3000"
