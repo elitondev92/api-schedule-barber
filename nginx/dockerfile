@@ -1,9 +1,7 @@
 FROM nginx
 
-COPY nginx.conf /etc/nginx/nginx.conf
+LABEL version="1.0" description="Nginx Configuration" maintainer="Jonatas Serra"
 
-# Expose port 80
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]
