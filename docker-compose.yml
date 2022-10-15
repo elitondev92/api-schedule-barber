@@ -5,7 +5,8 @@ services:
     ports:
       - "80:80"
     volumes:
-      - .:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./html:/usr/share/nginx/html
     depends_on:
         - node
   node:
@@ -16,7 +17,4 @@ services:
       - 3000
     ports:
       - 3000:3000
-    volumes:
-      - .:/usr/src/app
-      - /usr/src/app/node_modules
       
