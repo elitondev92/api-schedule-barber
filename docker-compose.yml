@@ -7,7 +7,7 @@ services:
     ports:
       - 3000:3000
   nginx:
-    build: ./nginx
+    build: /usr/src/app/nginx
     ports:
       - 80:80
     depends_on:
