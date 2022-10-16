@@ -21,7 +21,7 @@ export class WorksService {
 
   public async create(userId: string, createWorkDto: CreateWorkDto) {
     const checkWork = await this.workModel
-      .findOne({ barber: userId } && { name: createWorkDto.name })
+      .findOne({ name: createWorkDto.name })
       .exec();
     if (checkWork) {
       throw new AppError('Este serviço já existe');
