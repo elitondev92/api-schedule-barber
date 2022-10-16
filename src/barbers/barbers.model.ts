@@ -11,6 +11,8 @@ export class Barber {
   email: string;
   @Prop({ required: true })
   password: string;
+  @Prop()
+  image: string;
 }
 
 export const BarberSchema = SchemaFactory.createForClass(Barber);
