@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   UseGuards,
 } from '@nestjs/common';
@@ -26,6 +27,12 @@ export class BarbersController {
   @Post('signup')
   create(@Body() createBarberDto: any): any {
     return this.babersService.create(createBarberDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() updateBarberDto: any) {
+    return this.babersService.update(id, updateBarberDto);
   }
 
   @Delete(':id')

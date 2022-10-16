@@ -33,6 +33,16 @@ export class BarbersService {
     return createdBarber;
   }
 
+  async update(id: string, updateBarberDto: any) {
+    const checkBarber = await this.baberModel
+      .findOne({ email: updateBarberDto.email })
+      .exec();
+    if (checkBarber) {
+      throw new AppError('Barbeiro já cadastrado');
+    }
+    return this.baberModel.findByIdAndUpdate(id, updateBarberDto).exec();
+  }
+
   async remove(id: string) {
     return this.baberModel.findByIdAndDelete(id).exec();
   }
