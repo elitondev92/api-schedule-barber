@@ -53,29 +53,38 @@ export class WorksController {
     return this.worksService.remove(id);
   }
 
-  @Post(':id/upload')
+  @Post('upload')
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
         destination: './tmp/uploads',
         filename: (req, file, cb) => {
-          crypto.pseudoRandomBytes(16, (err, raw) => {
-            cb(null, raw.toString('hex') + extname(file.originalname));
+          crypto.randomBytes(16, (err, hash) => {
+            if (err) cb(err, file.filename);
+
+            const fileName = `${hash.toString('hex')}-${extname(
+              file.originalname,
+            )}`;
+
+            cb(null, fileName);
           });
         },
       }),
+      fileFilter: (req, file, cb) => {
+        if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+          cb(null, true);
+        } else {
+          cb(new Error('Invalid file type'), false);
+        }
+      },
     }),
   )
-  async saveFile(@Param('id') id: string, @UploadedFile() file) {
-    return this.worksService.saveFile(file.filename).then(() =>
-      this.worksService.update(id, {
-        image: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.filename}`,
-      }),
+  async uploadFile(@UploadedFile() file) {
+    return (
+      this.worksService.saveFile(file.filename),
+      {
+        url: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.filename}`,
+      }
     );
-  }
-
-  @Delete(':id/delete')
-  async deleteFile(@Param('id') id: string) {
-    return this.worksService.deleteFile(id);
   }
 }
