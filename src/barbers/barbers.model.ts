@@ -7,12 +7,47 @@ export type BarberDocument = Barber & Document;
 export class Barber {
   @Prop({ required: true })
   name: string;
+
   @Prop({ required: true, unique: true })
   email: string;
+
   @Prop({ required: true })
   password: string;
+
   @Prop()
   image: string;
+
+  @Prop()
+  phone: string;
+
+  @Prop({ type: [{ type: String }] })
+  address: {
+    street: string;
+    number: string;
+    city: string;
+    state: string;
+    zip: string;
+    coutry: string;
+  };
+
+  @Prop({ type: [{ type: String }], index: '2dsphere' })
+  geoLocation: {
+    type: string;
+    coordinates: [number, number];
+  };
+
+  @Prop({ type: [{ type: String }] })
+  schedules: {
+    day: string;
+    start: string;
+    end: string;
+  };
+
+  @Prop({ default: Date.now })
+  createdAt: Date;
+
+  @Prop({ default: Date.now })
+  updatedAt: Date;
 }
 
 export const BarberSchema = SchemaFactory.createForClass(Barber);
