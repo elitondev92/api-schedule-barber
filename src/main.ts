@@ -15,7 +15,7 @@ async function bootstrap() {
     }
   });
   app.enableCors({
-    origin: 'https://apiagendabarber.brazilsouth.cloudapp.azure.com/',
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
