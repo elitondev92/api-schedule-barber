@@ -14,7 +14,12 @@ async function bootstrap() {
       });
     }
   });
-  app.enableCors();
+  app.enableCors({
+    origin: 'https://apiagendabarber.brazilsouth.cloudapp.azure.com/',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
+  });
   await app.listen(3000);
 }
 bootstrap();
