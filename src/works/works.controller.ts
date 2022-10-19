@@ -19,6 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
 import * as crypto from 'crypto';
+import uploadConfig from '../config/upload';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('works')
@@ -54,31 +55,7 @@ export class WorksController {
   }
 
   @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './tmp/uploads',
-        filename: (req, file, cb) => {
-          crypto.randomBytes(16, (err, hash) => {
-            if (err) cb(err, file.filename);
-
-            const fileName = `${hash.toString('hex')}-${extname(
-              file.originalname,
-            )}`;
-
-            cb(null, fileName);
-          });
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
-          cb(null, true);
-        } else {
-          cb(new Error('Invalid file type'), false);
-        }
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file', uploadConfig.multerConfig))
   async uploadFile(@UploadedFile() file) {
     return (
       this.worksService.saveFile(file.filename),
