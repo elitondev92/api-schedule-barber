@@ -31,11 +31,11 @@ export class WorksService {
   }
 
   public async findAll(userId: string) {
-    return this.workModel.find({ barber: userId }).exec();
+    return await this.workModel.find({ barber: userId }).exec();
   }
 
-  public async findOne(userId: string, id: string) {
-    return this.workModel.findById({ barber: userId }, id).exec();
+  public async findOne(id: string, userId: string) {
+    return await this.workModel.findById(id, { barber: userId }).exec();
   }
 
   public async update(id: string, updateWorkDto: UpdateWorkDto) {

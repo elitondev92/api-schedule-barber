@@ -1,3 +1,4 @@
+import { plainToClass } from 'class-transformer';
 import {
   Controller,
   Get,
@@ -8,18 +9,19 @@ import {
   Delete,
   UseGuards,
   Request,
+  Response,
   UseInterceptors,
   UploadedFile,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { WorksService } from './works.service';
 import { CreateWorkDto } from './dto/create-work.dto';
 import { UpdateWorkDto } from './dto/update-work.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-import * as crypto from 'crypto';
 import uploadConfig from '../config/upload';
+import { WorksSerializer } from './serializer/works.serializer';
+import { response } from 'express';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('works')
@@ -32,10 +34,16 @@ export class WorksController {
     return this.worksService.create(user.userId, createWorkDto);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll(@Request() req) {
     const { user } = req;
-    return this.worksService.findAll(user.userId);
+
+    return plainToClass(
+      WorksSerializer,
+      this.worksService.findAll(user.userId),
+      { excludeExtraneousValues: true, enableImplicitConversion: true },
+    );
   }
 
   @Get(':id')
@@ -55,13 +63,8 @@ export class WorksController {
   }
 
   @Post('upload')
-  @UseInterceptors(FileInterceptor('file', uploadConfig.multerConfig))
+  @UseInterceptors(FileInterceptor('file', uploadConfig.multer))
   async uploadFile(@UploadedFile() file) {
-    return (
-      this.worksService.saveFile(file.filename),
-      {
-        url: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.filename}`,
-      }
-    );
+    return file;
   }
 }

@@ -1,21 +1,28 @@
-import uuid from 'uuid';
+import { randomBytes } from 'crypto';
 import { diskStorage, StorageEngine } from 'multer';
-import { extname } from 'path';
+import { extname, resolve } from 'path';
+
+const tmpFolder = resolve(__dirname, '..', '..', 'tmp', 'uploads');
 
 interface IUploadConfig {
-  multerConfig: {
+  tmpFolder: string;
+
+  multer: {
     storage: StorageEngine;
   };
 }
 
 export default {
-  multerConfig: {
-    storage: diskStorage({
-      destination: './tmp/uploads',
-      filename: (req, file, cb) => {
-        const fileName = `${uuid.v4()}${extname(file.originalname)}`;
+  tmpFolder,
 
-        return cb(null, fileName);
+  multer: {
+    storage: diskStorage({
+      destination: tmpFolder,
+      filename(request, file, callback) {
+        const fileHash = randomBytes(10).toString('hex');
+        const fileName = `${fileHash}-${file.originalname}`;
+
+        return callback(null, fileName);
       },
     }),
     fileFilter: (req, file, cb) => {

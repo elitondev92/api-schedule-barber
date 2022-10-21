@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+import 'es6-shim';
 import { NestFactory } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { AppModule } from './app.module';

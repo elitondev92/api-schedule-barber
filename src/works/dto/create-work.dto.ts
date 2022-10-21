@@ -6,4 +6,7 @@ export class CreateWorkDto {
   price: number;
   recurrence: number;
   image: string;
+  createdAt: Date;
+  updatedAt: Date;
+  image_url: string;
 }
