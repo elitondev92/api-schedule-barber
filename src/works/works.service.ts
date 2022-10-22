@@ -48,8 +48,16 @@ export class WorksService {
     return this.workModel.findByIdAndUpdate(id, updateWorkDto).exec();
   }
 
-  public async remove(id: string) {
-    return this.workModel.findByIdAndDelete(id).exec();
+  public async remove(image: string, id: string) {
+    await this.client
+      .deleteObject({
+        Bucket: process.env.AWS_BUCKET,
+        Key: image,
+      })
+      .promise();
+
+    this.workModel.findByIdAndDelete(id).exec();
+    return { message: 'Serviço removido com sucesso' };
   }
 
   // upload file to aws s3 bucket
@@ -82,10 +90,11 @@ export class WorksService {
     return file;
   }
 
+  // delete file from aws s3 bucket
   public async deleteFile(file: string): Promise<void> {
     await this.client
       .deleteObject({
-        Bucket: process.env.AWS_BUCKET,
+        Bucket: 'app-agendabarber2',
         Key: file,
       })
       .promise();

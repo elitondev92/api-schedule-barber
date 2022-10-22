@@ -58,8 +58,8 @@ export class WorksController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.worksService.remove(id);
+  remove(@Param('id') id: string, @Body() body) {
+    return this.worksService.remove(body.file, id);
   }
 
   @Post('upload')
