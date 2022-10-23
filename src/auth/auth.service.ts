@@ -1,4 +1,4 @@
-import { Barber } from './../barbers/barbers.model';
+import { Barber } from './../barbers/entities/barber.entity';
 import { Injectable } from '@nestjs/common';
 import { BarbersService } from 'src/barbers/barbers.service';
 import { compareSync } from 'bcrypt';
@@ -17,8 +17,8 @@ export class AuthService {
     const user = {
       email: barber.email,
       name: barber.name,
-      id: barber._id,
-      image: barber.image,
+      _id: barber._id,
+      image: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${barber.image}`,
     };
     return {
       user: user,

@@ -20,7 +20,7 @@ export class Barber {
   @Prop()
   phone: string;
 
-  @Prop({ type: [{ type: String }] })
+  @Prop({ type: Object })
   address: {
     street: string;
     number: string;
@@ -34,13 +34,6 @@ export class Barber {
   geoLocation: {
     type: string;
     coordinates: [number, number];
-  };
-
-  @Prop({ type: [{ type: String }] })
-  schedules: {
-    day: string;
-    start: string;
-    end: string;
   };
 
   @Prop({ default: Date.now })

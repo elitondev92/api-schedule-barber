@@ -9,7 +9,6 @@ import {
   Delete,
   UseGuards,
   Request,
-  Response,
   UseInterceptors,
   UploadedFile,
   ClassSerializerInterceptor,
@@ -21,7 +20,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import uploadConfig from '../config/upload';
 import { WorksSerializer } from './serializer/works.serializer';
-import { response } from 'express';
 
 @UseGuards(AuthGuard('jwt'))
 @Controller('works')
@@ -65,6 +63,11 @@ export class WorksController {
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', uploadConfig.multer))
   async uploadFile(@UploadedFile() file) {
-    return file;
+    return (
+      this.worksService.saveFile(file.filename),
+      {
+        url: file.filename,
+      }
+    );
   }
 }

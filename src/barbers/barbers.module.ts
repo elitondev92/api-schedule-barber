@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Barber, BarberSchema } from './barbers.model';
+import { Barber, BarberSchema } from './entities/barber.entity';
 import { BarbersController } from './barbers.controller';
 import { BarbersService } from './barbers.service';
 import * as bcrypt from 'bcrypt';

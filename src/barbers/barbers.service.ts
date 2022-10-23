@@ -1,8 +1,10 @@
-import AppError from 'src/errors/AppError';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Barber, BarberDocument } from './barbers.model';
+import { CreateBarberDto } from './dto/create-barber.dto';
+import { UpdateBarberDto } from './dto/update-barber.dto';
+import { Barber, BarberDocument } from './entities/barber.entity';
+import AppError from 'src/errors/AppError';
 import { S3 } from 'aws-sdk';
 import { resolve } from 'path';
 import * as fs from 'fs';
@@ -28,10 +30,18 @@ export class BarbersService {
     if (!barber) {
       throw new Error('Barber not found');
     }
-    return barber;
+    return barber as Barber;
   }
 
-  async create(createBarberDto: any) {
+  async findOneById(_id: string) {
+    const barber = await this.baberModel.findOne({ _id }).exec();
+    if (!barber) {
+      throw new Error('Barber not found');
+    }
+    return barber as Barber;
+  }
+
+  async create(createBarberDto: CreateBarberDto) {
     const checkBarber = await this.baberModel
       .findOne({ email: createBarberDto.email })
       .exec();
@@ -42,7 +52,7 @@ export class BarbersService {
     return createdBarber;
   }
 
-  async update(id: string, updateBarberDto: any) {
+  async update(id: string, updateBarberDto: UpdateBarberDto) {
     const checkBarber = await this.baberModel
       .findOne({ email: updateBarberDto.email })
       .exec();

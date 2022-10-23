@@ -1,3 +1,4 @@
+import { plainToClass } from 'class-transformer';
 import {
   Body,
   Controller,
@@ -9,15 +10,14 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { BarbersService } from './barbers.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
-import * as crypto from 'crypto';
-
+import uploadConfig from '../config/upload';
+import { BarbersSerializer } from './serializer/barbers.serializer';
 @Controller('barbers')
 export class BarbersController {
   constructor(private readonly babersService: BarbersService) {}
@@ -26,6 +26,19 @@ export class BarbersController {
   @Get()
   findAll(): any {
     return this.babersService.findAll();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get(':id')
+  findOneById(@Param('id') _id: string): any {
+    return plainToClass(
+      BarbersSerializer,
+      this.babersService.findOneById(_id),
+      {
+        excludeExtraneousValues: true,
+      },
+    );
   }
 
   @IsPublic()
@@ -46,37 +59,14 @@ export class BarbersController {
     return this.babersService.remove(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('upload')
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: './tmp/uploads',
-        filename: (req, file, cb) => {
-          crypto.randomBytes(16, (err, hash) => {
-            if (err) cb(err, file.filename);
-
-            const fileName = `${hash.toString('hex')}-${extname(
-              file.originalname,
-            )}`;
-
-            cb(null, fileName);
-          });
-        },
-      }),
-      fileFilter: (req, file, cb) => {
-        if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
-          cb(null, true);
-        } else {
-          cb(new Error('Invalid file type'), false);
-        }
-      },
-    }),
-  )
+  @UseInterceptors(FileInterceptor('file', uploadConfig.multer))
   async uploadFile(@UploadedFile() file) {
     return (
       this.babersService.saveFile(file.filename),
       {
-        url: `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.filename}`,
+        url: file.filename,
       }
     );
   }

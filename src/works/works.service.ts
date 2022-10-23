@@ -49,12 +49,14 @@ export class WorksService {
   }
 
   public async remove(image: string, id: string) {
-    await this.client
-      .deleteObject({
-        Bucket: process.env.AWS_BUCKET,
-        Key: image,
-      })
-      .promise();
+    if (image) {
+      await this.client
+        .deleteObject({
+          Bucket: process.env.AWS_BUCKET,
+          Key: image,
+        })
+        .promise();
+    }
 
     this.workModel.findByIdAndDelete(id).exec();
     return { message: 'Serviço removido com sucesso' };
