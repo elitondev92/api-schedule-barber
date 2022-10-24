@@ -1,4 +1,4 @@
-import { plainToClass } from 'class-transformer';
+import { classToPlain, plainToClass } from 'class-transformer';
 import {
   Body,
   Controller,
@@ -49,9 +49,16 @@ export class BarbersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBarberDto: any) {
-    return this.babersService.update(id, updateBarberDto);
+    return plainToClass(
+      BarbersSerializer,
+      this.babersService.update(id, updateBarberDto),
+      {
+        excludeExtraneousValues: true,
+      },
+    );
   }
 
   @Delete(':id')

@@ -11,6 +11,7 @@ export class CreateBarberDto {
     zip: string;
     coutry: string;
   };
+  photos: string[];
   geoLocation: {
     type: string;
     coordinates: [number, number];

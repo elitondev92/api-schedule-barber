@@ -30,6 +30,25 @@ export class Barber {
     coutry: string;
   };
 
+  @Prop({ type: Array, length: 5 })
+  photos: [
+    {
+      photo_1: string;
+    },
+    {
+      photo_2: string;
+    },
+    {
+      photo_3: string;
+    },
+    {
+      photo_4: string;
+    },
+    {
+      photo_5: string;
+    },
+  ];
+
   @Prop({ type: [{ type: String }], index: '2dsphere' })
   geoLocation: {
     type: string;
