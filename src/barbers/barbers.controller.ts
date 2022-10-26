@@ -1,4 +1,4 @@
-import { classToPlain, plainToClass } from 'class-transformer';
+import { plainToClass } from 'class-transformer';
 import {
   Body,
   Controller,
@@ -87,7 +87,10 @@ export class BarbersController {
       await this.babersService.saveFile(file.filename);
     }
     return {
-      url: files.map((file) => file.filename),
+      photos: files.map(
+        (file) =>
+          `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.filename}`,
+      ),
     };
   }
 }
