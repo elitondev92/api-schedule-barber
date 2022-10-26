@@ -80,15 +80,14 @@ export class BarbersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('uploads')
+  @Post('gallery')
   @UseInterceptors(FilesInterceptor('files', 5, uploadConfig.multer))
-  uploadFiles(@UploadedFiles() files) {
-    return (
-      this.babersService.saveFiles(files),
-      //map files to return array of object
-      files.map((file) => ({
-        url: file.filename,
-      }))
-    );
+  async uploadFiles(@UploadedFiles() files) {
+    for (const file of files) {
+      await this.babersService.saveFile(file.filename);
+    }
+    return {
+      url: files.map((file) => file.filename),
+    };
   }
 }
