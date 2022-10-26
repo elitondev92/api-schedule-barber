@@ -41,4 +41,17 @@ export class AuthService {
 
     return barber;
   }
+
+  // verify if token is valid
+  async checkToken(token: string) {
+    try {
+      const payload = await this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,
+      });
+
+      return payload;
+    } catch (error) {
+      throw new AppError('Expired or invalid token', 401);
+    }
+  }
 }
