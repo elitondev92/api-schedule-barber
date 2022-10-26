@@ -51,7 +51,7 @@ export class AuthService {
 
       return payload;
     } catch (error) {
-      throw new AppError('Expired or invalid token', 401);
+      throw new AppError('Expired or invalid token');
     }
   }
 }

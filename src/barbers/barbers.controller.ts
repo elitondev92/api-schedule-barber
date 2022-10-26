@@ -11,11 +11,12 @@ import {
   UseInterceptors,
   UploadedFile,
   ClassSerializerInterceptor,
+  UploadedFiles,
 } from '@nestjs/common';
 import { IsPublic } from 'src/auth/decorators/is-public.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { BarbersService } from './barbers.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import uploadConfig from '../config/upload';
 import { BarbersSerializer } from './serializer/barbers.serializer';
 @Controller('barbers')
@@ -75,6 +76,19 @@ export class BarbersController {
       {
         url: file.filename,
       }
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('uploads')
+  @UseInterceptors(FilesInterceptor('files', 5, uploadConfig.multer))
+  uploadFiles(@UploadedFiles() files) {
+    return (
+      this.babersService.saveFiles(files),
+      //map files to return array of object
+      files.map((file) => ({
+        url: file.filename,
+      }))
     );
   }
 }

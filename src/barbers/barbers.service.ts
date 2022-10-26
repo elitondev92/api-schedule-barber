@@ -103,4 +103,37 @@ export class BarbersService {
       })
       .promise();
   }
+
+  // upload multiple files aws s3
+
+  public async saveFiles(files: string[]): Promise<string[]> {
+    const originalPath = resolve(__dirname, '..', '..', 'tmp', 'uploads');
+
+    const mime = require('mime');
+
+    const ContentType = mime.getType(originalPath);
+
+    if (!ContentType) {
+      throw new AppError('File not found');
+    }
+
+    const fileContent = fs.readFileSync(originalPath);
+    const promises = files.map(async (file) => {
+      await this.client
+        .putObject({
+          Bucket: 'app-agendabarber2',
+          Key: file,
+          ACL: 'public-read',
+          Body: fileContent,
+          ContentType,
+          ContentDisposition: `inline; filename=${file}`,
+        })
+        .promise();
+    });
+
+    await Promise.all(promises);
+
+    await fs.promises.unlink(originalPath);
+    return files;
+  }
 }
