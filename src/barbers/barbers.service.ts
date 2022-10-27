@@ -103,4 +103,18 @@ export class BarbersService {
       })
       .promise();
   }
+
+  // delete photo from photos array
+  public async deletePhoto(id: string, photo: string) {
+    const barber = await this.baberModel.findById(id).exec();
+    if (!barber) {
+      throw new AppError('Barber not found');
+    }
+    const photos = barber.photos;
+
+    photos.splice(photos.indexOf(photo), 1);
+
+    await this.baberModel.findByIdAndUpdate(id, { photos }).exec();
+    return barber.photos;
+  }
 }

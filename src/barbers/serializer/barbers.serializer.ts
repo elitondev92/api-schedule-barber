@@ -24,23 +24,7 @@ export class BarbersSerializer {
   };
 
   @Expose()
-  photos: [
-    {
-      photo_1: string;
-    },
-    {
-      photo_2: string;
-    },
-    {
-      photo_3: string;
-    },
-    {
-      photo_4: string;
-    },
-    {
-      photo_5: string;
-    },
-  ];
+  photos: string[];
 
   @Expose()
   image: string;
@@ -60,5 +44,15 @@ export class BarbersSerializer {
       return 'https://app-agendabarber2.s3.amazonaws.com/imagem_2022-10-21_141207333.png';
     }
     return `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${this.image}`;
+  }
+
+  @Expose({ name: 'photos_url' })
+  getphotos_url(): string[] {
+    if (!this.photos) {
+      return [];
+    }
+    return this.photos.map(
+      (photo) => `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${photo}`,
+    );
   }
 }

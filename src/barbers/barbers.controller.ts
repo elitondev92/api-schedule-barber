@@ -82,15 +82,20 @@ export class BarbersController {
   @UseGuards(JwtAuthGuard)
   @Post('gallery')
   @UseInterceptors(FilesInterceptor('files', 5, uploadConfig.multer))
-  async uploadFiles(@UploadedFiles() files) {
+  uploadFiles(@UploadedFiles() files) {
     for (const file of files) {
-      await this.babersService.saveFile(file.filename);
+      this.babersService.saveFile(file.filename);
     }
-    return {
-      photos: files.map(
-        (file) =>
-          `https://${process.env.AWS_BUCKET}.s3.amazonaws.com/${file.filename}`,
-      ),
-    };
+    return [
+      {
+        photos: files.map((file) => file.filename),
+      },
+    ];
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('gallery/:id')
+  deletePhotoFromPhotosArray(@Param('id') id: string, @Body() body: any) {
+    return this.babersService.deletePhoto(id, body);
   }
 }
