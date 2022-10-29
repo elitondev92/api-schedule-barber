@@ -94,8 +94,8 @@ export class BarbersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Delete('gallery/:id')
-  deletePhotoFromPhotosArray(@Param('id') id: string, @Body() body: any) {
+  @Patch('gallery/:id')
+  deletePhoto(@Param('id') id: string, @Body() body: any) {
     return this.babersService.deletePhoto(id, body);
   }
 }

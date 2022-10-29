@@ -8,6 +8,7 @@ import AppError from 'src/errors/AppError';
 import { S3 } from 'aws-sdk';
 import { resolve } from 'path';
 import * as fs from 'fs';
+import { map } from 'rxjs';
 
 @Injectable()
 export class BarbersService {
@@ -107,14 +108,24 @@ export class BarbersService {
   // delete photo from photos array
   public async deletePhoto(id: string, photo: string) {
     const barber = await this.baberModel.findById(id).exec();
-    if (!barber) {
-      throw new AppError('Barber not found');
-    }
     const photos = barber.photos;
 
-    photos.splice(photos.indexOf(photo), 1);
+    // check if barber exists
+    try {
+      if (!barber) {
+        throw new AppError('Barber not found');
+      }
+    } catch (error) {
+      throw new AppError(error.message);
+    }
 
-    await this.baberModel.findByIdAndUpdate(id, { photos }).exec();
+    // filter photo
+
+    const filteredPhotos = photos.filter((item) => !photo.includes(item));
+
+    // update barber
+    await this.baberModel.findByIdAndUpdate(id, { photos: filteredPhotos });
+
     return barber.photos;
   }
 }
