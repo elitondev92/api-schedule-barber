@@ -17,10 +17,18 @@ async function bootstrap() {
     }
   });
   app.enableCors({
-    origin: '*',
+    origin: [
+      'http://localhost:5173',
+      'https://agendabarber.vercel.app',
+      'https://agendabarber.vercel.app/Dash',
+      'https://agendabarber.vercel.app/Dash/resume',
+      'https://agendabarber.vercel.app/Dash/settings',
+      'https://agendabarber.vercel.app/Dash/products',
+      'https://agendabarber.vercel.app/Dash/services',
+    ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
+    allowedHeaders: 'Content-Type, Authorization',
+    credentials: true,
   });
   await app.listen(3000);
 }
