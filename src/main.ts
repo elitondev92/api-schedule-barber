@@ -17,7 +17,7 @@ async function bootstrap() {
     }
   });
   app.enableCors({
-    origin: ['https://agendabarber.vercel.app', 'http://localhost:5173'],
+    origin: '*',
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Authorization',
     credentials: true,
