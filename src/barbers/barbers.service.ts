@@ -97,12 +97,16 @@ export class BarbersService {
   }
 
   public async deleteFile(file: string): Promise<void> {
-    await this.client
-      .deleteObject({
-        Bucket: process.env.AWS_BUCKET,
-        Key: file,
-      })
-      .promise();
+    try {
+      await this.client
+        .deleteObject({
+          Bucket: process.env.AWS_BUCKET,
+          Key: file,
+        })
+        .promise();
+    } catch (error) {
+      throw new AppError(error.message);
+    }
   }
 
   // delete photo from photos array

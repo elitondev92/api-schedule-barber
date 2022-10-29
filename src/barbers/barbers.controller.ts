@@ -98,4 +98,10 @@ export class BarbersController {
   deletePhoto(@Param('id') id: string, @Body() body: any) {
     return this.babersService.deletePhoto(id, body);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('gallery/:file')
+  deleteFile(@Param('file') file: string) {
+    return this.babersService.deleteFile(file);
+  }
 }

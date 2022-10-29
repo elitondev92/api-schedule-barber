@@ -20,7 +20,7 @@ export default {
       destination: tmpFolder,
       filename(request, file, callback) {
         const fileHash = randomBytes(10).toString('hex');
-        const fileName = `${fileHash}-${file.originalname}`;
+        const fileName = `${fileHash}-${extname(file.originalname)}`;
 
         return callback(null, fileName);
       },
