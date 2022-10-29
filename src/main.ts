@@ -16,11 +16,11 @@ async function bootstrap() {
       });
     }
   });
-  app.enableCors({
-    origin: ['https://agendabarber.vercel.app', 'http://localhost:5173'],
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Authorization, Accept',
-    credentials: true,
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Accept');
+    next();
   });
   await app.listen(3000);
 }
