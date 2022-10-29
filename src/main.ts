@@ -27,7 +27,7 @@ async function bootstrap() {
       'https://agendabarber.vercel.app/Dash/services',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    allowedHeaders: 'Content-Type, Authorization',
+    allowedHeaders: 'Content-Type, Authorization, X-Requested-With, Accept',
     credentials: true,
   });
   await app.listen(3000);
