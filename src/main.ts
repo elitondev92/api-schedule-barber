@@ -3,6 +3,7 @@ import 'es6-shim';
 import { NestFactory } from '@nestjs/core';
 import { Request, Response } from 'express';
 import { AppModule } from './app.module';
+import { urlencoded, json } from 'express';
 
 import AppError from './errors/AppError';
 
@@ -16,6 +17,8 @@ async function bootstrap() {
       });
     }
   });
+  app.use(json({ limit: '50mb' }));
+  app.use(urlencoded({ extended: true, limit: '50mb' }));
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,PATCH,POST,DELETE');
