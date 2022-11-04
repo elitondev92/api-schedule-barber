@@ -68,8 +68,8 @@ export class BarbersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('upload')
   @UseInterceptors(FileInterceptor('file', uploadConfig.multer))
+  @Post('upload')
   async uploadFile(@UploadedFile() file) {
     return (
       this.babersService.saveFile(file.filename),
@@ -80,8 +80,8 @@ export class BarbersController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('gallery')
   @UseInterceptors(FilesInterceptor('files', 5, uploadConfig.multer))
+  @Post('gallery')
   uploadFiles(@UploadedFiles() files) {
     for (const file of files) {
       this.babersService.saveFile(file.filename);
