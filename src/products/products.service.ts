@@ -42,12 +42,6 @@ export class ProductsService {
   }
 
   update(id: string, updateProductDto: UpdateProductDto) {
-    const checkProduct = this.productModel
-      .findOne({ name: updateProductDto.name })
-      .exec();
-    if (checkProduct) {
-      throw new AppError('O produto já existe');
-    }
     return this.productModel.findByIdAndUpdate(id, updateProductDto).exec();
   }
 

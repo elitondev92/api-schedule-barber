@@ -39,12 +39,6 @@ export class WorksService {
   }
 
   public async update(id: string, updateWorkDto: UpdateWorkDto) {
-    const checkWork = await this.workModel
-      .findOne({ name: updateWorkDto.name })
-      .exec();
-    if (checkWork) {
-      throw new AppError('Este serviço já existe');
-    }
     return this.workModel.findByIdAndUpdate(id, updateWorkDto).exec();
   }
 
