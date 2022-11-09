@@ -16,9 +16,9 @@ async function bootstrap() {
       });
     }
   });
-  // Defined Max Request Body Size to 500mb
-  app.use(urlencoded({ limit: '500mb', extended: true }));
-  app.use(json({ limit: '500mb' }));
+  // Defined Max Request Body Size to 50mb
+  app.use(urlencoded({ limit: '50mb', extended: true }));
+  app.use(json({ limit: '50mb' }));
   app.enableCors({
     allowedHeaders: '*',
     origin: '*',
