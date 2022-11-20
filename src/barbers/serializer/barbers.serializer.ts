@@ -32,6 +32,63 @@ export class BarbersSerializer {
   @Exclude()
   password: string;
 
+  @Expose()
+  workdays: {
+    sunday: boolean;
+    monday: boolean;
+    tuesday: boolean;
+    wednesday: boolean;
+    thursday: boolean;
+    friday: boolean;
+    saturday: boolean;
+  };
+
+  @Expose()
+  workhours: {
+    sunday: {
+      start: string;
+      breakStart: string;
+      breakEnd: string;
+      end: string;
+    };
+    monday: {
+      start: string;
+      breakStart: string;
+      breakEnd: string;
+      end: string;
+    };
+    tuesday: {
+      start: string;
+      breakStart: string;
+      breakEnd: string;
+      end: string;
+    };
+    wednesday: {
+      start: string;
+      breakStart: string;
+      breakEnd: string;
+      end: string;
+    };
+    thursday: {
+      start: string;
+      breakStart: string;
+      breakEnd: string;
+      end: string;
+    };
+    friday: {
+      start: string;
+      breakStart: string;
+      breakEnd: string;
+      end: string;
+    };
+    saturday: {
+      start: string;
+      breakStart: string;
+      breakEnd: string;
+      end: string;
+    };
+  };
+
   @Exclude()
   createdAt: Date;
 
