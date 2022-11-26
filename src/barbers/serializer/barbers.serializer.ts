@@ -89,6 +89,12 @@ export class BarbersSerializer {
     };
   };
 
+  @Expose()
+  geoLocation: {
+    type: string;
+    coordinates: [number, number];
+  };
+
   @Exclude()
   createdAt: Date;
 
