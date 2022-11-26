@@ -33,7 +33,7 @@ export class Barber {
   @Prop({ type: Array, length: 5 })
   photos: string[];
 
-  @Prop({ type: [{ type: String }], index: '2dsphere' })
+  @Prop({ type: Object })
   geoLocation: {
     type: string;
     coordinates: [number, number];
