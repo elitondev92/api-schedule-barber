@@ -1,5 +1,6 @@
 import { ConfigModule } from '@nestjs/config';
 import { BarbersModule } from './../barbers/barbers.module';
+import { UsersModule } from './../users/users.module';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
@@ -11,6 +12,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    UsersModule,
     BarbersModule,
     PassportModule,
     JwtModule.register({

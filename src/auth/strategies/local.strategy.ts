@@ -12,9 +12,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   async validate(email: string, password: string) {
     const barber = await this.authService.validateBarber(email, password);
-    if (!barber) {
+    const user = await this.authService.validateUser(email, password);
+
+    if (!barber && !user) {
       throw new AppError('Invalid credentials', 401);
     }
-    return barber;
+
+    return user || barber;
   }
 }

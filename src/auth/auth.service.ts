@@ -1,6 +1,8 @@
 import { Barber } from './../barbers/entities/barber.entity';
+import { User } from './../users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
 import { BarbersService } from 'src/barbers/barbers.service';
+import { UsersService } from 'src/users/users.service';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import AppError from 'src/errors/AppError';
@@ -9,6 +11,7 @@ import AppError from 'src/errors/AppError';
 export class AuthService {
   constructor(
     private readonly barbersService: BarbersService,
+    private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -31,12 +34,12 @@ export class AuthService {
     try {
       barber = await this.barbersService.findOne(email);
     } catch (error) {
-      throw new AppError('Invalid credentials', 401);
+      return null;
     }
 
-    const isPasswordValid = await compareSync(password, barber.password);
+    const isPasswordValid = compareSync(password, barber.password);
     if (!isPasswordValid) {
-      throw new AppError('Invalid credentials', 401);
+      return null;
     }
 
     return barber;
@@ -53,5 +56,22 @@ export class AuthService {
     } catch (error) {
       throw new AppError('Expired or invalid token');
     }
+  }
+
+  async validateUser(email: string, password: string) {
+    let user: User;
+
+    try {
+      user = await this.usersService.findOne(email);
+    } catch (error) {
+      return null;
+    }
+
+    const isPasswordValid = compareSync(password, user.password);
+    if (!isPasswordValid) {
+      return null;
+    }
+
+    return user;
   }
 }
