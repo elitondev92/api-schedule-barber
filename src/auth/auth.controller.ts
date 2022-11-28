@@ -19,4 +19,11 @@ export class AuthController {
   async checkToken(@Body('token') token: string) {
     return this.authService.checkToken(token);
   }
+
+  @UseGuards(AuthGuard('user'))
+  @Post('loginuser')
+  async loginUser(@Req() req: any) {
+    const user = req.user;
+    return this.authService.loginUser(user);
+  }
 }
