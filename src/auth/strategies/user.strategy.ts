@@ -5,18 +5,18 @@ import { AuthService } from '../auth.service';
 import AppError from 'src/errors/AppError';
 
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class UserStrategy extends PassportStrategy(Strategy, 'user') {
   constructor(private readonly authService: AuthService) {
     super({ usernameField: 'email', passwordField: 'password' });
   }
 
   async validate(email: string, password: string) {
-    const barber = await this.authService.validateBarber(email, password);
+    const user = await this.authService.validateUser(email, password);
 
-    if (!barber) {
+    if (!user) {
       throw new AppError('Invalid credentials', 401);
     }
 
-    return barber;
+    return user;
   }
 }

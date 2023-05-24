@@ -1,18 +1,18 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Barber, BarberSchema } from './entities/barber.entity';
-import { BarbersController } from './barbers.controller';
-import { BarbersService } from './barbers.service';
+import { User, UserSchema } from './entities/user.entity';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
 import * as bcrypt from 'bcrypt';
 
 @Module({
-  exports: [BarbersService],
+  exports: [UsersService],
   imports: [
     MongooseModule.forFeatureAsync([
       {
-        name: Barber.name,
+        name: User.name,
         useFactory: () => {
-          const schema = BarberSchema;
+          const schema = UserSchema;
           schema.pre('save', async function () {
             const salt = await bcrypt.genSalt(10);
             const hashPassword = await bcrypt.hash(this.password, salt);
@@ -23,7 +23,7 @@ import * as bcrypt from 'bcrypt';
       },
     ]),
   ],
-  controllers: [BarbersController],
-  providers: [BarbersService],
+  controllers: [UsersController],
+  providers: [UsersService],
 })
-export class BarbersModule {}
+export class UsersModule {}

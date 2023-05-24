@@ -1,52 +1,58 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { CreateProductDto } from './dto/create-product.dto';
-import { UpdateProductDto } from './dto/update-product.dto';
-import { Product, ProductDocument } from './entities/product.entity';
+import { CreateStylistDto } from './dto/create-stylist.dto';
+import { UpdateStylistDto } from './dto/update-stylist.dto';
+import { Stylist, StylistDocument } from './entities/stylist.entity';
 import AppError from '../errors/AppError';
 import { S3 } from 'aws-sdk';
 import { resolve } from 'path';
 import * as fs from 'fs';
 
 @Injectable()
-export class ProductsService {
+export class StylistService {
   private client: S3;
 
   constructor(
-    @InjectModel(Product.name)
-    private productModel: Model<ProductDocument>,
+    @InjectModel(Stylist.name)
+    private stylistModel: Model<StylistDocument>,
   ) {
     this.client = new S3({
       region: 'us-east-1',
     });
   }
 
-  public async create(createProductDto: CreateProductDto) {
-    const checkProduct = await this.productModel
-      .findOne({ name: createProductDto.name })
+  public async create(createStylistDto: CreateStylistDto) {
+    const checkStylist = await this.stylistModel
+      .findOne({ name: createStylistDto.name })
       .exec();
-    if (checkProduct) {
-      throw new AppError('O produto já existe');
+    if (checkStylist) {
+      throw new AppError('O profissional já existe');
     }
-    const createdProduct = new this.productModel(createProductDto);
-    return createdProduct.save();
+    const createdStylist = new this.stylistModel(createStylistDto);
+    return createdStylist.save();
   }
 
   public async findAll(userId: string) {
-    return this.productModel.find({ barber: userId }).exec();
+    return this.stylistModel.find({ barber: userId }).exec();
   }
 
   findOne(id: string) {
-    return this.productModel.findById(id).exec();
+    return this.stylistModel.findById(id).exec();
   }
 
-  update(id: string, updateProductDto: UpdateProductDto) {
-    return this.productModel.findByIdAndUpdate(id, updateProductDto).exec();
+  update(id: string, updateStylistDto: UpdateStylistDto) {
+    const checkStylist = this.stylistModel
+      .findOne({ name: updateStylistDto.name })
+      .exec();
+    if (checkStylist) {
+      throw new AppError('O profissional já existe');
+    }
+    return this.stylistModel.findByIdAndUpdate(id, updateStylistDto).exec();
   }
 
   remove(id: string) {
-    return this.productModel.findByIdAndDelete(id).exec();
+    return this.stylistModel.findByIdAndDelete(id).exec();
   }
   // upload file to aws s3 bucket
   public async saveFile(file: string): Promise<string> {

@@ -2,10 +2,10 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { Document } from 'mongoose';
 import { Barber } from '../../barbers/entities/barber.entity';
 
-export type WorkDocument = Work & Document;
+export type StylistDocument = Stylist & Document;
 
 @Schema({ autoIndex: true })
-export class Work {
+export class Stylist {
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'Barber' })
   barber: Barber;
 
@@ -13,19 +13,19 @@ export class Work {
   name: string;
 
   @Prop()
-  description: string;
-
-  @Prop({ required: true })
-  duration: number;
-
-  @Prop({ required: true })
-  price: number;
+  bio: string;
 
   @Prop()
-  recurrence: number;
+  photo: string;
 
   @Prop()
-  image: string;
+  dateofinitiation: Date;
+
+  @Prop()
+  rate: number;
+
+  @Prop()
+  countofreviews: number;
 
   @Prop()
   createdAt: Date;
@@ -34,4 +34,4 @@ export class Work {
   updatedAt: Date;
 }
 
-export const WorkSchema = SchemaFactory.createForClass(Work);
+export const StylistSchema = SchemaFactory.createForClass(Stylist);
